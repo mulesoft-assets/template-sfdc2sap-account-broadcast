@@ -22,6 +22,7 @@ http://www.mulesoft.org/schema/mule/objectstore http://www.mulesoft.org/schema/m
     <data-mapper:config name="CUSTOMER_GET_KTOKD_to_KTOKD" transformationGraphPath="customer_get_ktokd_to_ktokd.grf" doc:name="CUSTOMER_GET_KTOKD_to_KTOKD"/>
     <data-mapper:config name="BAPI_CUSTOMER_FIND_to_Customer" transformationGraphPath="bapi_customer_find_to_customer.grf" doc:name="BAPI_CUSTOMER_FIND_to_Customer"/>
     <data-mapper:config name="BAPI_CUSTOMER_GETINTNUMBER_to_Customr_Number" transformationGraphPath="bapi_customer_getintnumber_to_customr_number.grf" doc:name="BAPI_CUSTOMER_GETINTNUMBER_to_Customr_Number"/>
+    <data-mapper:config name="Map_To_Map" transformationGraphPath="map_to_map.grf" doc:name="Map_To_Map"/>
 	<batch:job name="syncAccountsBatch">
 		<batch:threading-profile poolExhaustedAction="WAIT" />
 		<batch:process-records>
@@ -52,9 +53,9 @@ http://www.mulesoft.org/schema/mule/objectstore http://www.mulesoft.org/schema/m
 				</enricher>
 			</batch:step>
             <batch:step name="forEachAccountInSapGetAccountGroup" accept-expression="!(recordVars['sapCustomer'] is NullPayload)">
-                <enricher source="#[payload['KTOKD']]" target="#[payload['KTOKD']]" doc:name="store result in record var 'sapCustomer'">
+                <enricher source="#[payload['AccountGroup']]" target="#[payload['AccountGroup']]" doc:name="store var 'AccountGroup'">
                     <processor-chain doc:name="Processor Chain">
-                        <sap:outbound-endpoint exchange-pattern="request-response" connector-ref="SAP" type="function" functionName="CUSTOMER_GET_KTOKD" xmlVersion="2" outputXml="true" evaluateFunctionResponse="true" responseTimeout="10000" doc:name="SAP">
+                        <sap:outbound-endpoint exchange-pattern="request-response" connector-ref="SAP" type="function" functionName="CUSTOMER_GET_KTOKD" xmlVersion="2" outputXml="true" evaluateFunctionResponse="true" responseTimeout="10000" doc:name="Get Account Group from SAP">
                             <sap:definition><![CDATA[<jco>
 	<import>
 		<field name="IV_KUNNR">#[recordVars['sapCustomer']['Id']]</field>
@@ -62,17 +63,17 @@ http://www.mulesoft.org/schema/mule/objectstore http://www.mulesoft.org/schema/m
 </jco>
 ]]></sap:definition>
                         </sap:outbound-endpoint>
-                        <data-mapper:transform config-ref="CUSTOMER_GET_KTOKD_to_KTOKD" doc:name="CUSTOMER_GET_KTOKD to KTOKD"/>
+                        <data-mapper:transform config-ref="CUSTOMER_GET_KTOKD_to_KTOKD" doc:name="CUSTOMER_GET_KTOKD to AccountGroup"/>
                     </processor-chain>
                 </enricher>
-                <expression-component doc:name="prepare for update"><![CDATA[payload.put('Id', recordVars['sapCustomer']['Id']);
-payload.put('MSGFN', '005');
+                <expression-component doc:name="prepare for update"><![CDATA[payload.put('MessageFunction', '005'); // Replace: This message replaces previous messages
+payload.put('CustomerNumber', recordVars['sapCustomer']['CustomerNumber']);
 ]]></expression-component>
             </batch:step>
             <batch:step name="forEachNewAccountGetCustomerNumber" accept-expression="recordVars['sapCustomer'] is NullPayload">
-                <enricher source="#[payload['CUSTOMERID']]" target="#[payload['Id']]" doc:name="Message Enricher">
+                <enricher source="#[payload['CustomerNumber']]" target="#[payload['CustomerNumber']]" doc:name="Message Enricher">
                     <processor-chain doc:name="Processor Chain">
-                        <sap:outbound-endpoint exchange-pattern="request-response" connector-ref="SAP" type="function" functionName="BAPI_CUSTOMER_GETINTNUMBER" xmlVersion="2" outputXml="true" evaluateFunctionResponse="true" responseTimeout="10000" doc:name="SAP">
+                        <sap:outbound-endpoint exchange-pattern="request-response" connector-ref="SAP" type="function" functionName="BAPI_CUSTOMER_GETINTNUMBER" xmlVersion="2" outputXml="true" evaluateFunctionResponse="true" responseTimeout="10000" doc:name="Get Next Customer Number from SAP">
                             <sap:definition><![CDATA[<jco>
 	<import>
 		<field name="ACCOUNTGROUP">ZAG2</field>
@@ -83,8 +84,8 @@ payload.put('MSGFN', '005');
                         <data-mapper:transform config-ref="BAPI_CUSTOMER_GETINTNUMBER_to_Customr_Number" doc:name="BAPI_CUSTOMER_GETINTNUMBER to Customr Number"/>
                     </processor-chain>
                 </enricher>
-                <expression-component doc:name="prepare for create"><![CDATA[payload.put('MSGFN', '009');
-payload.put('KTOKD', 'ZAG2');
+                <expression-component doc:name="prepare for create"><![CDATA[payload.put('MessageFunction', '009'); // Original: First message for process
+payload.put('AccountGroup', '${sap.default.accountGroup}');
 ]]></expression-component>
             </batch:step>
 			<batch:step name="foreachAccountInAUpsertAccountInBStep">
@@ -101,9 +102,9 @@ payload.put('KTOKD', 'ZAG2');
     <flow name="commitAccountsFlow" doc:name="commitAccountsFlow">
         <logger message="Accounts to update/create: #[payload]" level="INFO" doc:name="log Accounts to update/create"/>
         <data-mapper:transform config-ref="Salesfore_Account_to_DEBMAS01" doc:name="Salesfore Account to DEBMAS01"/>
-        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
         <sap:outbound-endpoint exchange-pattern="request-response" connector-ref="SAP" type="idoc" functionName="DEBMAS01" xmlVersion="2" outputXml="true" evaluateFunctionResponse="true" responseTimeout="10000" doc:name="SAP"/>
         <logger message="Upsert result: #[payload]" level="INFO" doc:name="log Result"/>
+        <data-mapper:transform config-ref="Map_To_Map" doc:name="Map To Map"/>
     </flow>
 
 </mule>

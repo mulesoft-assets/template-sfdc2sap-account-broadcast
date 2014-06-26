@@ -22,7 +22,7 @@
 <Metadata __index="0" __referenceCounter="1" __sourcePath="{}/Customer_x0020Number" _dataStructure="OBJECT" _id="__id" _type="Output" id="dad22a99-8bc8-44a4-9c1d-6602fa0b5984">
 <Record fieldDelimiter="," name="Customer_Number" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
 <Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
-<Field __index="0" __sourcePath="{}/Customer_x0020Number/CUSTOMERID" containerType="SINGLE" label="CUSTOMERID" name="Customer_Number" type="string"/>
+<Field __index="0" __sourcePath="{}/Customer_x0020Number/CustomerNumber" containerType="SINGLE" label="CustomerNumber" name="Customer_Number" type="string"/>
 </Record>
 </Metadata>
 <Metadata __index="14" __referenceCounter="0" __sourcePath="{}/BAPI_CUSTOMER_GETINTNUMBER/tables/CUSTOMER/row" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="272aa445-a566-4f47-8879-649eaa0d189b" _parent_id="__parent_id" _type="Input" id="8560dd2e-9c54-4d76-a3cb-f23ae4ea1f6e">
@@ -49,7 +49,7 @@ output.Customer_Number = input.CUSTOMERID;]]></attr>
 <Node cacheInMemory="true" enabled="enabled" fileURL="dict:outputPayload" guiName="Map&lt;k,v&gt; WRITER" guiX="900" guiY="20" id="MAP_WRITER0" type="MAP_WRITER">
 <attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <clover:element clover:name="Customer Number" xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" clover:inPort="0">
-  <CUSTOMERID>$0.Customer_Number</CUSTOMERID>
+  <CustomerNumber>$0.Customer_Number</CustomerNumber>
 </clover:element>]]></attr>
 <attr name="_data_format"><![CDATA[MAP]]></attr>
 </Node>
