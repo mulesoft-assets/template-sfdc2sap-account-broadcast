@@ -22,6 +22,7 @@
 <Record fieldDelimiter="," name="Customers" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
 <Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
 <Field __sourcePath="{}/Customers/CustomerNumber" containerType="SINGLE" label="CustomerNumber" name="CustomerNumber" type="string"/>
+<Field __sourcePath="{}/Customers/Name" containerType="SINGLE" label="Name" name="Name" type="string"/>
 </Record>
 </Metadata>
 <Metadata __index="12" __referenceCounter="1" __sourcePath="{}/BAPI_CUSTOMER_FIND/tables/RESULT_TAB/row" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="f82b7cc1-b70b-4369-9751-06054006b5cc" _parent_id="__parent_id" _type="Input" id="02304a98-7129-4a40-933e-f64404216fed">
@@ -80,16 +81,18 @@ output.__id = input.__id;
 output.__id = input.__id;
 //END -> DO NOT REMOVE
 output.CustomerNumber = input.CUSTOMER;
-]]></attr>
+output.Name = input.FIELDVALUE;]]></attr>
 </Node>
 <Node cacheInMemory="true" enabled="enabled" fileURL="dict:outputPayload" guiName="Map&lt;k,v&gt; WRITER" guiX="900" guiY="20" id="MAP_WRITER0" type="MAP_WRITER">
 <attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <clover:collection clover:name="Customers" xmlns:clover="http://www.cloveretl.com/ns/xmlmapping">
   <item clover:inPort="0">
     <CustomerNumber>$0.CustomerNumber</CustomerNumber>
+    <Name>$0.Name</Name>
   </item>
   <item clover:inPort="1">
     <CustomerNumber>$1.CustomerNumber</CustomerNumber>
+    <Name>$1.Name</Name>
   </item>
 </clover:collection>]]></attr>
 <attr name="_data_format"><![CDATA[MAP]]></attr>
