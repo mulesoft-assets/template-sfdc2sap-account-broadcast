@@ -49,7 +49,7 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 		<sap:outbound-endpoint exchange-pattern="request-response"
 			connector-ref="SAP" type="function" functionName="BAPI_CUSTOMER_FIND"
 			xmlVersion="2" outputXml="true" evaluateFunctionResponse="true"
-			responseTimeout="10000" doc:name="SAP">
+			responseTimeout="10000" doc:name="Find Customers in SAP">
             <sap:definition><![CDATA[<jco>
 	<import>
 		<field name="MAX_CNT">0</field>
@@ -67,13 +67,19 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 </jco>
 ]]></sap:definition>
 		</sap:outbound-endpoint>
-		<logger message="#[payload]" level="INFO" category="CHRUNO"
-			doc:name="Logger" />
 		<data-mapper:transform config-ref="BAPI_CUSTOMER_FIND_to_Customer"
 			doc:name="BAPI_CUSTOMER_FIND to Customer" />
 	</sub-flow>
 	<sub-flow name="deleteAccountsFromSapFlow" doc:name="deleteAccountsFromSapFlow">
 		<foreach doc:name="For Each">
+            <sap:outbound-endpoint exchange-pattern="request-response" connector-ref="SAP" type="function" functionName="ZMULE_CUSTOMER_DELETE" xmlVersion="2" outputXml="true" evaluateFunctionResponse="true" responseTimeout="10000" doc:name="Delete Customer from SAP">
+                <sap:definition><![CDATA[<jco>
+	<import>
+		<field name="I_CUSTOMER">#[payload]</field>
+	</import>
+</jco>
+]]></sap:definition>
+            </sap:outbound-endpoint>
 <!-- 			<sap:outbound-endpoint exchange-pattern="request-response" -->
 <!-- 				connector-ref="SAP" type="function" functionName="BAPI_CUSTOMER_DELETE" -->
 <!-- 				xmlVersion="2" outputXml="true" evaluateFunctionResponse="true" -->
@@ -85,8 +91,6 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 <!-- </jco> -->
 <!-- ]]></sap:definition> -->
 <!-- 			</sap:outbound-endpoint> -->
-			<logger message="#[payload]" level="INFO" category="SAPDEL"
-				doc:name="Logger" />
 		</foreach>
 	</sub-flow>
 	<sub-flow name="deleteAccountsFromSalesforceFlow" doc:name="deleteAccountsFromSalesforceFlow">
