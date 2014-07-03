@@ -80,17 +80,6 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 </jco>
 ]]></sap:definition>
             </sap:outbound-endpoint>
-<!-- 			<sap:outbound-endpoint exchange-pattern="request-response" -->
-<!-- 				connector-ref="SAP" type="function" functionName="BAPI_CUSTOMER_DELETE" -->
-<!-- 				xmlVersion="2" outputXml="true" evaluateFunctionResponse="true" -->
-<!-- 				responseTimeout="10000" doc:name="Delete Customer from SAP"> -->
-<!--                 <sap:definition><![CDATA[<jco> -->
-<!-- 	<import> -->
-<!-- 		<field name="CUSTOMERNO">#[payload]</field> -->
-<!-- 	</import> -->
-<!-- </jco> -->
-<!-- ]]></sap:definition> -->
-<!-- 			</sap:outbound-endpoint> -->
 		</foreach>
 	</sub-flow>
 	<sub-flow name="deleteAccountsFromSalesforceFlow" doc:name="deleteAccountsFromSalesforceFlow">
