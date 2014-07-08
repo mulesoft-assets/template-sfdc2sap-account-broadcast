@@ -75,7 +75,7 @@ payload.put('CustomerNumber', recordVars['sapCustomer']['CustomerNumber']);
                         <sap:outbound-endpoint exchange-pattern="request-response" connector-ref="SAP" type="function" functionName="BAPI_CUSTOMER_GETINTNUMBER" xmlVersion="2" outputXml="true" evaluateFunctionResponse="true" responseTimeout="10000" doc:name="Get Next Customer Number from SAP">
                             <sap:definition><![CDATA[<jco>
 	<import>
-		<field name="ACCOUNTGROUP">ZAG2</field>
+		<field name="ACCOUNTGROUP">${sap.default.accountGroup}</field>
 	</import>
 </jco>
 ]]></sap:definition>

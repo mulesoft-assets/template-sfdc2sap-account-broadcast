@@ -30,6 +30,7 @@ Here you should not:
         </poll>
         <logger message="#[payload]" level="INFO" doc:name="Log created/updated Accounts"/>
         <batch:execute name="syncAccountsBatch" doc:name="Trigger syncAccountsBatch"/>
+        <exception-strategy ref="defaultChoiceExceptionStrategy" doc:name="Catch Exception and call defaultChoiceExceptionStrategy"/>
     </flow>
     
 </mule>
