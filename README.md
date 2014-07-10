@@ -75,6 +75,24 @@ In order to have this template working as expected, you should be aware of your 
 
 If the user configured in the template for the source system does not have at least *read only* permissions for the fields that are fetched, then a *InvalidFieldFault* API fault will show up.
 
+```
+java.lang.RuntimeException: [InvalidFieldFault [ApiQueryFault [ApiFault  exceptionCode='INVALID_FIELD'
+exceptionMessage='
+Account.Phone, Account.Rating, Account.RecordTypeId, Account.ShippingCity
+^
+ERROR at Row:1:Column:486
+No such column 'RecordTypeId' on entity 'Account'. If you are attempting to use a custom field, be sure to append the '__c' after the custom field name. Please reference your WSDL or the describe call for the appropriate names.'
+]
+row='1'
+column='486'
+]
+]
+```
+
+
+
+
+
 # Run it! <a name="runit"/>
 Simple steps to get SFDC2SAP-account-customer-broadcast running.
 
@@ -131,26 +149,26 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 ### Application configuration
 **Common configuration**
 
-+ polling.frequency=10000
-+ polling.start.delay=5000
-+ watermark.default.expression=2014-06-26T12:30:00.000Z
++ polling.frequency `10000`
++ polling.start.delay `5000`
++ watermark.default.expression `2014-06-26T12:30:00.000Z`
 		
 **SalesForce Connector configuration**
 
-+ sfdc.username=bob.dylan@sfdc
-+ sfdc.password=DylanPassword123
-+ sfdc.securityToken=avsfwCUl7apQs56Xq2AKi3X
-+ sfdc.url=https://test.salesforce.com/services/Soap/u/28.0
++ sfdc.username `bob.dylan@sfdc`
++ sfdc.password `DylanPassword123`
++ sfdc.securityToken `avsfwCUl7apQs56Xq2AKi3X`
++ sfdc.url `https://test.salesforce.com/services/Soap/u/28.0`
 
 **SAP Connector configuration**
 
-+ sap.jco.ashost=your.sap.address.com
-+ sap.jco.user=SAP_USER
-+ sap.jco.passwd=SAP_PASS
-+ sap.jco.sysnr=14
-+ sap.jco.client=800
-+ sap.jco.lang=EN
-+ sap.default.accountGroup=ZAG2
++ sap.jco.ashost `your.sap.address.com`
++ sap.jco.user `SAP_USER`
++ sap.jco.passwd `SAP_PASS`
++ sap.jco.sysnr `14`
++ sap.jco.client `800`
++ sap.jco.lang `EN`
++ sap.default.accountGroup `ZAG2`
 
 # API Calls <a name="apicalls"/>
  
@@ -176,7 +194,7 @@ In the visual editor they can be found on the *Global Element* tab.
 
 
 ## businessLogic.xml<a name="businesslogicxml"/>
-Functional aspect of the Anypoint Template is implemented on this XML, directed by a batch job that will be responsible for creations/updates. The severeal message processors constitute four high level actions that fully implement the logic of this Anypoint Template:
+Functional aspect of the Anypoint Template is implemented on this XML, directed by a batch job that will be responsible for creations/updates. The several message processors constitute four high level actions that fully implement the logic of this Anypoint Template:
 
 1. Job execution is invoked from triggerFlow (endpoints.xml) everytime there is a new query executed asking for created/updated Contacts.
 2. During the Process stage, each SFDC User will be filtered depending on, if it has an existing matching user in the SFDC Org B.
