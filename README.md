@@ -1,5 +1,5 @@
 
-# Anypoint Template: SFDC2SAP-account-customer-broadcast
+# Anypoint Template: SFDC2SAP-account-broadcast
 
 + [License Agreement](#licenseagreement)
 + [Use Case](#usecase)
@@ -94,7 +94,7 @@ column='486'
 
 
 # Run it! <a name="runit"/>
-Simple steps to get SFDC2SAP-account-customer-broadcast running.
+Simple steps to get SFDC2SAP-account-broadcast running.
 
 
 ## Running on premise <a name="runonopremise"/>

@@ -1,14 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	version="1.0">
+<!--
+
+    Mule Anypoint Template
+
+    Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
+
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0">
 	<xsd:element name="BAPI_CUSTOMER_GETINTNUMBER">
 		<xsd:complexType>
 			<xsd:sequence>
 				<xsd:element name="import" minOccurs="0" maxOccurs="1">
 					<xsd:complexType>
 						<xsd:all>
-							<xsd:element name="ACCOUNTGROUP" minOccurs="0"
-								maxOccurs="1">
+							<xsd:element name="ACCOUNTGROUP" minOccurs="0" maxOccurs="1">
 								<xsd:annotation>
 									<xsd:documentation>Account group</xsd:documentation>
 								</xsd:annotation>
@@ -34,8 +39,7 @@
 				<xsd:element name="export" minOccurs="0" maxOccurs="1">
 					<xsd:complexType>
 						<xsd:all>
-							<xsd:element name="CUSTOMERID" minOccurs="0"
-								maxOccurs="1">
+							<xsd:element name="CUSTOMERID" minOccurs="0" maxOccurs="1">
 								<xsd:annotation>
 									<xsd:documentation>Next Free Customer Number</xsd:documentation>
 								</xsd:annotation>
@@ -79,8 +83,7 @@
 												</xsd:simpleContent>
 											</xsd:complexType>
 										</xsd:element>
-										<xsd:element name="NUMBER" minOccurs="0"
-											maxOccurs="1">
+										<xsd:element name="NUMBER" minOccurs="0" maxOccurs="1">
 											<xsd:annotation>
 												<xsd:documentation>Message Number</xsd:documentation>
 											</xsd:annotation>
@@ -90,8 +93,7 @@
 												</xsd:simpleContent>
 											</xsd:complexType>
 										</xsd:element>
-										<xsd:element name="MESSAGE" minOccurs="0"
-											maxOccurs="1">
+										<xsd:element name="MESSAGE" minOccurs="0" maxOccurs="1">
 											<xsd:annotation>
 												<xsd:documentation>Message Text</xsd:documentation>
 											</xsd:annotation>
@@ -101,8 +103,7 @@
 												</xsd:simpleContent>
 											</xsd:complexType>
 										</xsd:element>
-										<xsd:element name="LOG_NO" minOccurs="0"
-											maxOccurs="1">
+										<xsd:element name="LOG_NO" minOccurs="0" maxOccurs="1">
 											<xsd:annotation>
 												<xsd:documentation>Application log: log number</xsd:documentation>
 											</xsd:annotation>
@@ -112,8 +113,7 @@
 												</xsd:simpleContent>
 											</xsd:complexType>
 										</xsd:element>
-										<xsd:element name="LOG_MSG_NO" minOccurs="0"
-											maxOccurs="1">
+										<xsd:element name="LOG_MSG_NO" minOccurs="0" maxOccurs="1">
 											<xsd:annotation>
 												<xsd:documentation>Application log: Internal message serial
 													number</xsd:documentation>
@@ -124,8 +124,7 @@
 												</xsd:simpleContent>
 											</xsd:complexType>
 										</xsd:element>
-										<xsd:element name="MESSAGE_V1" minOccurs="0"
-											maxOccurs="1">
+										<xsd:element name="MESSAGE_V1" minOccurs="0" maxOccurs="1">
 											<xsd:annotation>
 												<xsd:documentation>Message Variable</xsd:documentation>
 											</xsd:annotation>
@@ -135,8 +134,7 @@
 												</xsd:simpleContent>
 											</xsd:complexType>
 										</xsd:element>
-										<xsd:element name="MESSAGE_V2" minOccurs="0"
-											maxOccurs="1">
+										<xsd:element name="MESSAGE_V2" minOccurs="0" maxOccurs="1">
 											<xsd:annotation>
 												<xsd:documentation>Message Variable</xsd:documentation>
 											</xsd:annotation>
@@ -146,8 +144,7 @@
 												</xsd:simpleContent>
 											</xsd:complexType>
 										</xsd:element>
-										<xsd:element name="MESSAGE_V3" minOccurs="0"
-											maxOccurs="1">
+										<xsd:element name="MESSAGE_V3" minOccurs="0" maxOccurs="1">
 											<xsd:annotation>
 												<xsd:documentation>Message Variable</xsd:documentation>
 											</xsd:annotation>
@@ -157,8 +154,7 @@
 												</xsd:simpleContent>
 											</xsd:complexType>
 										</xsd:element>
-										<xsd:element name="MESSAGE_V4" minOccurs="0"
-											maxOccurs="1">
+										<xsd:element name="MESSAGE_V4" minOccurs="0" maxOccurs="1">
 											<xsd:annotation>
 												<xsd:documentation>Message Variable</xsd:documentation>
 											</xsd:annotation>
@@ -183,8 +179,7 @@
 										<xsd:element name="row" minOccurs="0" maxOccurs="unbounded">
 											<xsd:complexType>
 												<xsd:sequence>
-													<xsd:element name="CUSTOMER" minOccurs="0"
-														maxOccurs="1">
+													<xsd:element name="CUSTOMER" minOccurs="0" maxOccurs="1">
 														<xsd:annotation>
 															<xsd:documentation>Customer Number</xsd:documentation>
 														</xsd:annotation>
@@ -195,8 +190,7 @@
 														</xsd:complexType>
 													</xsd:element>
 												</xsd:sequence>
-												<xsd:attribute name="id" type="xsd:integer"
-													use="required" />
+												<xsd:attribute name="id" type="xsd:integer" use="required" />
 											</xsd:complexType>
 										</xsd:element>
 									</xsd:sequence>
