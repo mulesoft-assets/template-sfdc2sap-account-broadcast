@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>com.mulesoft.muleesb.transports</groupId>
 			<artifactId>mule-transport-sap</artifactId>
-			<version>${sap.transport.version}</version>
+			<version>${sap.version}</version>
 		</dependency>
 
 		
