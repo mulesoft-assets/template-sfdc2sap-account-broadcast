@@ -42,7 +42,7 @@ You will find that there are three dependencies in the pom.xml file that begin w
 These dependencies are private for Mulesoft and will cause you application not to build from a Maven command line. You need to replace them with "provided" scope and copy the libraries into the build path.
 		]]>
 		</section>
-		<section id="api_calls">&#160;</section>
+		<section id="api_calls">There are no particular considerations for this Anypoint Template regarding API calls.</section>
 		<section id="application_configuration">
 		<![CDATA[
 **Common configuration**
