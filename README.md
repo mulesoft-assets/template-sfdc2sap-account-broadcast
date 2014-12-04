@@ -105,6 +105,7 @@ column='486'
 
 
 
+
 # Run it! <a name="runit"/>
 Simple steps to get SFDC2SAP-account-broadcast running.
 
@@ -183,7 +184,7 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 + sap.default.accountGroup `ZAG2`
 
 # API Calls <a name="apicalls"/>
- 
+There are no particular considerations for this Anypoint Template regarding API calls.
 
 
 # Customize It!<a name="customizeit"/>
