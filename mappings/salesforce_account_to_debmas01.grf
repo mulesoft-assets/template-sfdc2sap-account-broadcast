@@ -234,6 +234,8 @@
 <Field __sourcePath="{}/Salesforce_x0020Account/BillingState" containerType="SINGLE" label="BillingState" name="BillingState" type="string"/>
 <Field __sourcePath="{}/Salesforce_x0020Account/BillingCountry" containerType="SINGLE" label="BillingCountry" name="BillingCountry" type="string"/>
 <Field __sourcePath="{}/Salesforce_x0020Account/BillingPostalCode" containerType="SINGLE" label="BillingPostalCode" name="BillingPostalCode" type="string"/>
+<Field __sourcePath="{}/Salesforce_x0020Account/Fax" containerType="SINGLE" label="Fax" name="Fax" type="string"/>
+<Field __sourcePath="{}/Salesforce_x0020Account/Phone" containerType="SINGLE" label="Phone" name="Phone" type="string"/>
 </Record>
 </Metadata>
 <Dictionary>
@@ -254,6 +256,8 @@
   <Mapping cloverField="BillingState" trim="true" xpath="BillingState"/>
   <Mapping cloverField="BillingCountry" trim="true" xpath="BillingCountry"/>
   <Mapping cloverField="BillingPostalCode" trim="true" xpath="BillingPostalCode"/>
+  <Mapping cloverField="Fax" trim="true" xpath="Fax"/>
+  <Mapping cloverField="Phone" trim="true" xpath="Phone"/>
 </Context>
 ]]></attr>
 <attr name="_data_format"><![CDATA[MAP]]></attr>
@@ -439,12 +443,15 @@ output.RCVPRN = "MULESOFT";;
 output.SEGMENT = "1";;
 output.KUNNR = input.CustomerNumber;;
 output.ORT01 = input.BillingCity;;
-output.LAND1 = "SK" + input.BillingStreet;;
-
+output.LAND1 = "SK";
+output.STRAS = input.BillingStreet;
 output.SPRAS = "E";;
 output.SPRAS_ISO = "EN";;
 output.KTOKD = input.AccountGroup;
-output.MSGFN = input.MessageFunction;]]></attr>
+output.MSGFN = input.MessageFunction;
+output.PSTLZ = input.BillingPostalCode;
+output.TELFX = input.Fax;
+output.TELF1 = input.Phone;]]></attr>
 </Node>
 <Node enabled="enabled" guiName="Duplicate Salesforce_Account" guiX="240" guiY="20" id="SIMPLE_COPY0" type="SIMPLE_COPY"/>
 <Edge debugMode="true" fromNode="BEAN_READER0:0" guiBendpoints="" id="Edge2" inPort="Port 0 (in)" metadata="ba1f668a-cfe4-41a6-bc04-71fc077e36d5" outPort="Port 0 (out)" toNode="SIMPLE_COPY0:0"/>

@@ -5,7 +5,6 @@
 	</placeholders>
 	<sections>
 		<section id="use_case">
-		<![CDATA[
 This Anypoint Template should serve as a foundation for setting an online sync of accounts/customers from Salesforce to SAP.
 Everytime there is a new account or a change in already existing one in Salesforce instance, the template will fetch it and send it as IDoc to SAP to update customer there.
 
@@ -17,7 +16,6 @@ The integration is triggered by poll to Salesforce Accounts. New or modified acc
 In the batch the customer is fetched from SAP by its name. If it exists, its SAP Account Group is resolved against SAP.
 If it doesn't exist, then new customer number is fetched from SAP. Afterwards every such account from Salesforce is sent to SAP in form of iDoc XML where it is asynchronously updated or created. 
 Finally during the On Complete stage the Anypoint Template will log output statistics data into the console.
-		]]>		
 		</section>
 		<section id="running_on_studio">
 		<![CDATA[
