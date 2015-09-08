@@ -50,13 +50,14 @@ These dependencies are private for Mulesoft and will cause you application not t
 + polling.frequency `10000`
 + polling.start.delay `5000`
 + watermark.default.expression `2014-06-26T12:30:00.000Z`
++ sap.default.accountGroup `ZAG2`
 		
 **SalesForce Connector configuration**
 
 + sfdc.username `bob.dylan@sfdc`
 + sfdc.password `DylanPassword123`
 + sfdc.securityToken `avsfwCUl7apQs56Xq2AKi3X`
-+ sfdc.url `https://test.salesforce.com/services/Soap/u/28.0`
++ sfdc.url `https://test.salesforce.com/services/Soap/u/32.0`
 
 **SAP Connector configuration**
 
@@ -66,7 +67,6 @@ These dependencies are private for Mulesoft and will cause you application not t
 + sap.jco.sysnr `14`
 + sap.jco.client `800`
 + sap.jco.lang `EN`
-+ sap.default.accountGroup `ZAG2`
 ]]>
 		</section>
 	</sections>

@@ -26,7 +26,7 @@ Note that using this template is subject to the conditions of this [License Agre
 Please review the terms of the license before downloading and using this template. In short, you are allowed to use the template for free with Mule ESB Enterprise Edition, CloudHub, or as a trial in Anypoint Studio.
 
 # Use Case <a name="usecase"/>
-This Anypoint Template should serve as a foundation for setting an online sync of accounts/customers from Salesforce to SAP.
+This Anypoint Template should serve as a foundation for setting an online synchronization of accounts/customers from Salesforce to SAP.
 Everytime there is a new account or a change in already existing one in Salesforce instance, the template will fetch it and send it as IDoc to SAP to update customer there.
 
 Requirements have been set not only to be used as examples, but also to establish a starting point to adapt your integration to your requirements.
@@ -169,13 +169,14 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 + polling.frequency `10000`
 + polling.start.delay `5000`
 + watermark.default.expression `2014-06-26T12:30:00.000Z`
++ sap.default.accountGroup `ZAG2`
 		
 **SalesForce Connector configuration**
 
 + sfdc.username `bob.dylan@sfdc`
 + sfdc.password `DylanPassword123`
 + sfdc.securityToken `avsfwCUl7apQs56Xq2AKi3X`
-+ sfdc.url `https://test.salesforce.com/services/Soap/u/28.0`
++ sfdc.url `https://test.salesforce.com/services/Soap/u/32.0`
 
 **SAP Connector configuration**
 
@@ -185,7 +186,6 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 + sap.jco.sysnr `14`
 + sap.jco.client `800`
 + sap.jco.lang `EN`
-+ sap.default.accountGroup `ZAG2`
 
 # API Calls <a name="apicalls"/>
 There are no particular considerations for this Anypoint Template regarding API calls.
