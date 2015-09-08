@@ -49,6 +49,7 @@ import com.sforce.soap.partner.SaveResult;
  * @author damiansima
  * @author MartinZdila
  */
+@SuppressWarnings("deprecation")
 public class BusinessLogicIT extends FunctionalTestCase {
 
 
@@ -122,9 +123,9 @@ public class BusinessLogicIT extends FunctionalTestCase {
 		Map<String, Object>  payload1 = invokeRetrieveFlow(retrieveAccountFromSapFlow, createdAccountsInSalesforce.get(1));
 		Assert.assertNotNull("The account 1 should have been sync but is null", payload1);
 		Assert.assertEquals("The account 1 should have been sync (Name)", createdAccountsInSalesforce.get(1).get(KEY_NAME), payload1.get(KEY_NAME));
-		
+
 		Map<String, Object>  payload2 = invokeRetrieveFlow(retrieveAccountFromSapFlow, createdAccountsInSalesforce.get(2));
-		Assert.assertNull("The account 2 should have not been sync", payload2);
+		Assert.assertNull("The account 2 should have not been sync", payload2.get(KEY_NAME));
 	}
 
 	private void waitForPollToRun() {
@@ -154,7 +155,7 @@ public class BusinessLogicIT extends FunctionalTestCase {
 		String uniqueSuffix = "_" + TEMPLATE_NAME + "_" + System.currentTimeMillis();
 		
 		Map<String, Object> sapAccount3 = new HashMap<String, Object>();
-		sapAccount3.put(KEY_NAME, "Name_3_SAP" + uniqueSuffix);
+		sapAccount3.put(KEY_NAME, "Name_3_" + uniqueSuffix);
 		List<Map<String, Object>> createdAccountInSap = new ArrayList<Map<String, Object>>();
 		createdAccountInSap.add(sapAccount3);
 	
@@ -166,7 +167,7 @@ public class BusinessLogicIT extends FunctionalTestCase {
 	
 		// This account should be synced
 		Map<String, Object> sfdcAccount0 = new HashMap<String, Object>();
-		sfdcAccount0.put(KEY_NAME, "Name_0_SIEB" + uniqueSuffix);
+		sfdcAccount0.put(KEY_NAME, "Name_1_" + uniqueSuffix);
 		sfdcAccount0.put(KEY_NUMBER_OF_EMPLOYEES, 6000);
 		sfdcAccount0.put(KEY_INDUSTRY, "Education");
 		createdAccountsInSalesforce.add(sfdcAccount0);
@@ -180,7 +181,7 @@ public class BusinessLogicIT extends FunctionalTestCase {
 
 		// This account should not be synced because of employees / industry
 		Map<String, Object> sfdcAccount2 = new HashMap<String, Object>();
-		sfdcAccount2.put(KEY_NAME, "Name_2_SIEB" + uniqueSuffix);
+		sfdcAccount2.put(KEY_NAME, "Name_2_" + uniqueSuffix);
 		sfdcAccount2.put(KEY_NUMBER_OF_EMPLOYEES, 204);
 		sfdcAccount2.put(KEY_INDUSTRY, "Energetic");
 		createdAccountsInSalesforce.add(sfdcAccount2);
