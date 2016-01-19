@@ -22,7 +22,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 				responseTimeout="10000" doc:name="Get Next Customer Number from SAP">
                 <sap:definition><![CDATA[<BAPI_CUSTOMER_GETINTNUMBER type="function">
 	<import>
-			<ACCOUNTGROUP type="field" sapType="CHAR" sapLength="4">ZAG2</ACCOUNTGROUP>
+			<ACCOUNTGROUP type="field" sapType="CHAR" sapLength="4">ZAG1</ACCOUNTGROUP>
 	</import>
 </BAPI_CUSTOMER_GETINTNUMBER>]]></sap:definition>
 
