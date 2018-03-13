@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:sap="http://www.mulesoft.org/schema/mule/sap" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:batch="http://www.mulesoft.org/schema/mule/batch"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/sap http://www.mulesoft.org/schema/mule/sap/current/mule-sap.xsd">
+
+	<flow name="businessLogicFlow" doc:id="8759532e-79b7-4789-990c-dc8e162bfd67">
+		<batch:job jobName="migratesfdc2sapAccountsBatch" doc:id="204892ae-0d97-4326-beae-310c8d52b7a6">
+			<batch:process-records>
+				<batch:step name="foreachAccountInSalesforceGetAccountInSAP" doc:id="89713774-362a-4e92-9bdc-41e31802bf38">
+					<ee:transform doc:name="Set XML input" doc:id="ac03f508-baeb-48c5-9611-141485cc0967">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+---
+{
+  "BAPI_CUSTOMER_FIND": {
+    "import": {
+      "MAX_CNT": "0",
+      "PL_HOLD": "X"
+    },
+    "tables": {
+      "SELOPT_TAB": {
+        "row": {
+          "TABNAME": "KNA1",
+          "FIELDNAME": "NAME1",
+          "FIELDVALUE": if(sizeOf(payload.Name) > 20) (payload.Name[0 to 19]) else payload.Name
+        }
+      }
+    }
+  }
+}]]></ee:set-payload>
+						</ee:message>
+						<ee:variables>
+							<ee:set-variable variableName="account"><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+					<sap:execute-synchronous-remote-function-call
+						doc:name="Get Customer by Name" doc:id="25ae243a-e2b9-4014-8264-f8b0b16c9ae5" config-ref="SAP_Outbound"
+						key="BAPI_CUSTOMER_FIND" />
+					<ee:transform doc:name="Transform BAPI_CUSTOMER_FIND to Customer" doc:id="c82fd683-47bb-4372-a2da-b8adf279e188">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload."BAPI_CUSTOMER_FIND".tables."RESULT_TAB".*row map {
+	(CustomerNumber : $.CUSTOMER) if ($.CUSTOMER != null)
+}]]></ee:set-payload>
+						</ee:message>
+						<ee:variables>
+						</ee:variables>
+					</ee:transform>
+				</batch:step>
+				<batch:step name="Batch_Step" doc:id="30772829-5eb0-4c8a-81e4-187621245bee">
+					<choice doc:name="Is Account new" doc:id="34b5703f-c2b6-4c57-aad5-72638dcc4b7d">
+						<when expression="#[payload.CustomerNumber[0] != null]">
+							<ee:transform doc:name="Set XML input" doc:id="37c3ffef-24c0-4656-9230-0aa214a63c8d">
+								<ee:message>
+									<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+---
+{
+  "CUSTOMER_GET_KTOKD": {
+    "import": {
+      "IV_KUNNR": payload.CustomerNumber[0]
+    }
+  }
+}]]></ee:set-payload>
+								</ee:message>
+								<ee:variables>
+									<ee:set-variable variableName="customerNumber"><![CDATA[%dw 2.0
+output application/java
+---
+payload.CustomerNumber[0]]]></ee:set-variable>
+								</ee:variables>
+							</ee:transform>
+							<sap:execute-synchronous-remote-function-call
+								doc:name="Get Account Group from SAP" doc:id="a819fd73-b8f4-46ea-9e9b-d2f7916de6ac"
+								config-ref="SAP_Outbound" key="CUSTOMER_GET_KTOKD" />
+							<ee:transform doc:name="Transform CUSTOMER_GET_KTOKD to AccountGroup" doc:id="7dd041bd-d63b-4cec-8a8e-606f5473e609">
+								<ee:message>
+									<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+vars.account ++ {
+	CustomerNumber: vars.customerNumber,
+	AccountGroup : payload."CUSTOMER_GET_KTOKD".export."EV_KTOKD"
+}]]></ee:set-payload>
+								</ee:message>
+							</ee:transform>
+						</when>
+						<otherwise>
+							<ee:transform doc:name="Set XML input" doc:id="6b6cec59-67d7-4e29-bfdc-f076d938dd75">
+								<ee:message>
+									<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+---
+{
+  "BAPI_CUSTOMER_GETINTNUMBER": {
+    "import": {
+      "ACCOUNTGROUP": "${sap.default.accountGroup}"
+    }
+  }
+}]]></ee:set-payload>
+								</ee:message>
+							</ee:transform>
+							<sap:execute-synchronous-remote-function-call
+								doc:name="Get Next Customer Number from SAP" doc:id="b7265366-c2ed-4725-bea7-af6f08f36b70"
+								config-ref="SAP_Outbound" key="BAPI_CUSTOMER_GETINTNUMBER" />
+							<ee:transform doc:name="Transform BAPI_CUSTOMER_GETINTNUMBER to Customer Number"
+								doc:id="e8cda6f3-fe8b-4fcf-b1ca-d8b488baee2a">
+								<ee:message>
+									<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+vars.account ++ {
+	CustomerNumber : payload."BAPI_CUSTOMER_GETINTNUMBER".export.CUSTOMERID
+}]]></ee:set-payload>
+								</ee:message>
+							</ee:transform>
+						</otherwise>
+					</choice>
+				</batch:step>
+				<batch:step name="foreachAccountInSalesForceUpsertAccountInSAPStep" doc:id="78a74ab4-9b91-416d-985a-acda2ac377eb">
+					<batch:aggregator doc:name="UpsertAccountToSAP" doc:id="1ad86a98-643e-494a-a90a-32daab0b03cc"
+						size="${page.size}">
+						<foreach doc:name="For Each Salesforce Account" doc:id="265c1993-9ebd-489e-93da-b5c11a080a16"
+							collection="payload">
+							<logger level="INFO" doc:name="Log Accounts to upsert" doc:id="7236a9f6-7aaf-4f40-94e3-e477a132e88d"
+								message="Accounts to update/create: #[output application/json --- payload]" />
+							<ee:transform doc:name="Transform Salesforce Account to DEBMAS01" doc:id="5baf5b86-64bd-48cb-a079-fadce6025f84">
+								<ee:message>
+									<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+---
+DEBMAS01: {
+		IDOC @(BEGIN: "1"): {
+			"EDI_DC40" @(SEGMENT: "1"): {
+				TABNAM: "EDI_DC40",
+				DIRECT: "2",
+				IDOCTYP: "DEBMAS01",
+				MESTYP: "DEBMAS",
+				SNDPOR: "MULE01_LS",
+				SNDPRT: "LS",
+				SNDPRN: "MULE01_LS",
+				RCVPOR: "T90CLNT090",
+				RCVPRT: "LS",
+				RCVPRN: "T90CLNT090"
+			},
+			E1KNA1M @(SEGMENT: "1"): {
+				//setup properties for update or create (005 for update and 009 for create)
+				MSGFN: if (payload.AccountGroup == null) "009" else "005",
+				KUNNR: payload.CustomerNumber,
+				KTOKD: if (payload.AccountGroup != null) payload.AccountGroup
+					   else p('sap.default.accountGroup'),
+				LAND1: "SK",
+				NAME1: payload.Name,
+				(ORT01: payload.BillingCity) if (payload.BillingCity != null),
+				(PSTLZ: payload.BillingPostalCode) if (payload.BillingPostalCode != null),
+				SPRAS: "E",
+				(STRAS: payload.BillingStreet) if (payload.BillingStreet != null),
+				(TELF1: payload.Phone) if (payload.Phone != null),
+				(TELFX: payload.Fax) if (payload.Fax != null),
+				"SPRAS_ISO": "EN"				
+			}
+		}
+	}]]></ee:set-payload>
+								</ee:message>
+							</ee:transform>
+							<sap:send doc:name="Upsert Customer in SAP" doc:id="35a0bde0-32df-427d-970b-892cfe347067" config-ref="SAP_Outbound" key="DEBMAS01" />
+							<logger level="INFO" doc:name="Log Result" doc:id="933e7e0b-7d6d-4d09-b746-0b81398bf631"
+								message="Upsert result: #[output application/json --- payload]" />
+						</foreach>
+					</batch:aggregator>
+				</batch:step>
+			</batch:process-records>
+			<batch:on-complete>
+				<ee:transform doc:name="Prepare migration result" doc:id="c84b4bc4-5a65-41c1-9d0c-f1ebd3d8db7a">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output text/plain
+---
+"Migration Report: \n"
+
+++ "\n Time [milliseconds]: " 		++ payload.elapsedTimeInMillis
+++ "\n Total Records: "				++ payload.totalRecords
+++ "\n Successful Records: "		++ payload.successfulRecords
+++ "\n Failed Records: "			++ payload.failedRecords
+++ "\n Loaded Records: "			++ payload.loadedRecords
+++ "\n Processed Records: " 		++ payload.processedRecords]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="Migration process has finished!" doc:id="b7575d38-7dbd-4602-9186-1bbb25234896"
+					message="Migration process has finished: #[payload]" />
+			</batch:on-complete>
+		</batch:job>
+	</flow>
+
+</mule>
+
+
+        
