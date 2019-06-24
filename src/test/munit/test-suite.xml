@@ -155,7 +155,7 @@ payload."BAPI_CUSTOMER_FIND".tables."RESULT_TAB".*row map
 }]]></ee:set-payload>
 				</ee:message>
 			</ee:transform>
-		<munit-tools:assert-that doc:name="Assert that we found updated Customer" doc:id="05f39bd9-284d-4b1b-b3c3-9883484257f5" is="#[MunitTools::notNullValue()]" expression="#[payload[0].CustomerNumber]" />
+		<munit-tools:assert-that doc:name="Assert that we found updated Customer" doc:id="05f39bd9-284d-4b1b-b3c3-9883484257f5" is="#[MunitTools::notNullValue()]" expression="#[payload[0].CustomerNumber]" message="Assert that we found updated Customer has failed"/>
 	</flow>
 	<flow name="checkNotMigratedRecord" doc:id="1e2e27bd-2712-4069-b0ab-63c253d17148">
 		<ee:transform doc:name="Set SAP input" doc:id="6ccc6b8e-0d6d-4ae6-9c2b-c293513d72d9">
@@ -195,7 +195,7 @@ payload."BAPI_CUSTOMER_FIND".tables."RESULT_TAB".*row map
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<munit-tools:assert-that doc:name="Assert that we didn't find Customer" doc:id="4c3967f6-2aa8-45e3-9e18-5b10d7e9bc8c" expression="#[payload[0].CustomerNumber]" is="#[MunitTools::nullValue()]" />
+		<munit-tools:assert-that doc:name="Assert that we didn't find Customer" doc:id="4c3967f6-2aa8-45e3-9e18-5b10d7e9bc8c" expression="#[payload[0].CustomerNumber]" is="#[MunitTools::nullValue()]" message="Assert that we didn't find Customer has failed"/>
 	</flow>
 
 </mule>
