@@ -42,8 +42,8 @@ output application/java
 payload]]></ee:set-variable>
 						</ee:variables>
 					</ee:transform>
-					<sap:execute-synchronous-remote-function-call
-						doc:name="Get Customer by Name" doc:id="25ae243a-e2b9-4014-8264-f8b0b16c9ae5" config-ref="SAP_Outbound"
+					<sap:sync-rfc
+						doc:name="Get Customer by Name" doc:id="25ae243a-e2b9-4014-8264-f8b0b16c9ae5" config-ref="SAP_Config"
 						key="BAPI_CUSTOMER_FIND" />
 					<ee:transform doc:name="Transform BAPI_CUSTOMER_FIND to Customer" doc:id="c82fd683-47bb-4372-a2da-b8adf279e188">
 						<ee:message>
@@ -81,9 +81,9 @@ output application/java
 payload.CustomerNumber[0]]]></ee:set-variable>
 								</ee:variables>
 							</ee:transform>
-							<sap:execute-synchronous-remote-function-call
+							<sap:sync-rfc
 								doc:name="Get Account Group from SAP" doc:id="a819fd73-b8f4-46ea-9e9b-d2f7916de6ac"
-								config-ref="SAP_Outbound" key="CUSTOMER_GET_KTOKD" />
+								config-ref="SAP_Config" key="CUSTOMER_GET_KTOKD" />
 							<ee:transform doc:name="Transform CUSTOMER_GET_KTOKD to AccountGroup" doc:id="7dd041bd-d63b-4cec-8a8e-606f5473e609">
 								<ee:message>
 									<ee:set-payload><![CDATA[%dw 2.0
@@ -111,9 +111,9 @@ output application/xml
 }]]></ee:set-payload>
 								</ee:message>
 							</ee:transform>
-							<sap:execute-synchronous-remote-function-call
+							<sap:sync-rfc
 								doc:name="Get Next Customer Number from SAP" doc:id="b7265366-c2ed-4725-bea7-af6f08f36b70"
-								config-ref="SAP_Outbound" key="BAPI_CUSTOMER_GETINTNUMBER" />
+								config-ref="SAP_Config" key="BAPI_CUSTOMER_GETINTNUMBER" />
 							<ee:transform doc:name="Transform BAPI_CUSTOMER_GETINTNUMBER to Customer Number"
 								doc:id="e8cda6f3-fe8b-4fcf-b1ca-d8b488baee2a">
 								<ee:message>
@@ -175,7 +175,7 @@ DEBMAS01: {
 								</ee:message>
 							</ee:transform>
 							<sap:send doc:name="Upsert Customer in SAP" doc:id="35a0bde0-32df-427d-970b-892cfe347067"
-								config-ref="SAP_Outbound" key="DEBMAS01" />
+								config-ref="SAP_Config" key="DEBMAS01" />
 							<logger level="INFO" doc:name="Log Result" doc:id="933e7e0b-7d6d-4d09-b746-0b81398bf631"
 								message="Upsert result: #[output application/json --- payload]" />
 						</foreach>
