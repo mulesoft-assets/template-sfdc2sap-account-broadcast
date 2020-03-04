@@ -132,8 +132,8 @@ output application/xml
       "SELOPT_TAB": {
         "row": {
           "TABNAME": "KNA1",
-          "FIELDNAME": "NAME1",
-          "FIELDVALUE": vars.customerSAP.Name[0]
+         "FIELDNAME": "PSTLZ"  ,
+          "FIELDVALUE": vars.accounts[0].BillingPostalCode
         }
       }
     }
