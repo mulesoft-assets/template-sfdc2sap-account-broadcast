@@ -13,7 +13,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/sap http://www.mulesoft.org/schema/mule/sap/current/mule-sap.xsd">
 	<munit:config name="test-suite.xml" />
 
-	<configuration-properties doc:name="Configuration properties" doc:id="61136523-b150-4aeb-96a4-7bb375141cdd" file="C:\Users\hotovo\mule.dev.properties" />
+	<configuration-properties doc:name="Configuration properties" doc:id="61136523-b150-4aeb-96a4-7bb375141cdd" file="mule.test.properties" />
 	<munit:before-test name="test-suiteBefore_Test" description="Before tests actions" doc:id="2fde2104-4b1f-44d4-a87c-e0dcb98d2047">
 		<flow-ref doc:name="getTestRecordFromSAP" doc:id="c384e4f3-8b38-417f-aa13-c8b36e3ce629" name="getTestRecordFromSAP"/>
 		<ee:transform doc:name="Prepare testing data for Salesforce" doc:id="f3d20ce6-42ac-4d93-8eec-42c7a6461610">
