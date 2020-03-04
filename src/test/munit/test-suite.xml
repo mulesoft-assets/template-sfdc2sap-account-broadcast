@@ -61,7 +61,7 @@ payload distinctBy (queryData)]]></ee:set-payload>
 			</ee:transform>
 			<flow-ref doc:name="businessLogicFlow" doc:id="b01f179d-753f-4604-8840-020d7ffbc32e" name="businessLogicFlow" />
 			<scripting:execute doc:name="Sleep for 10s until the processing is completed" doc:id="01a863ce-27b6-4ce6-8f5f-3e0b1da095b4" engine="groovy">
-				<scripting:code>sleep(10000)</scripting:code>
+				<scripting:code>sleep(30000)</scripting:code>
 			</scripting:execute>
 			<flow-ref doc:name="checkMigratedRecord" doc:id="a884d5e4-0eb1-4172-a9be-968980b4af6f" name="checkMigratedRecord"/>
 			<flow-ref doc:name="checkNotMigratedRecord" doc:id="6b7d9037-8109-421c-aace-9926f74c7dee" name="checkNotMigratedRecord"/>
