@@ -13,7 +13,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/sap http://www.mulesoft.org/schema/mule/sap/current/mule-sap.xsd">
 	<munit:config name="test-suite.xml" />
 
-	<configuration-properties doc:name="Configuration properties" doc:id="61136523-b150-4aeb-96a4-7bb375141cdd" file="mule.test.properties" />
+	<configuration-properties doc:name="Configuration properties" doc:id="61136523-b150-4aeb-96a4-7bb375141cdd" file="C:\Users\hotovo\mule.dev.properties" />
 	<munit:before-test name="test-suiteBefore_Test" description="Before tests actions" doc:id="2fde2104-4b1f-44d4-a87c-e0dcb98d2047">
 		<flow-ref doc:name="getTestRecordFromSAP" doc:id="c384e4f3-8b38-417f-aa13-c8b36e3ce629" name="getTestRecordFromSAP"/>
 		<ee:transform doc:name="Prepare testing data for Salesforce" doc:id="f3d20ce6-42ac-4d93-8eec-42c7a6461610">
@@ -45,7 +45,7 @@ output application/java
 		<salesforce:create type="Account" doc:name="Create Accounts in Salesforce" doc:id="fbea33fb-3a9f-482d-b346-1f55aa473eb9" config-ref="Salesforce">
 			<salesforce:records ><![CDATA[#[vars.accounts]]]></salesforce:records>
 		</salesforce:create>
-		<set-variable value="#[payload map ($.id)]" doc:name="Store IDs to variable sfdcIds" doc:id="413fbb75-d093-4418-963b-92b23d8b5b9f" variableName="sfdcIds"/>
+		<set-variable value="#[payload.items.id]" doc:name="Store IDs to variable sfdcIds" doc:id="413fbb75-d093-4418-963b-92b23d8b5b9f" variableName="sfdcIds"/>
 	</munit:before-test>
 	<munit:test name="test-suite-flowTest" description="Test" doc:id="c1d43016-feca-4b17-a7d7-c08d5f6565ba">
 		<munit:execution>
@@ -73,7 +73,7 @@ payload distinctBy (queryData)]]></ee:set-payload>
 	</munit:test>
 	<munit:after-test name="test-suiteAfter_Test" description="After tests actions" doc:id="86475d6f-cf23-460b-9504-4d09cc840d68">
 		<salesforce:delete doc:name="Delete source Accounts from Salesforce" doc:id="e8e74886-fb83-4ed0-927d-14c6cdf7da97" config-ref="Salesforce">
-			<salesforce:delete-ids><![CDATA[#[vars.sfdcIds]]]></salesforce:delete-ids>
+			<salesforce:ids><![CDATA[#[vars.sfdcIds]]]></salesforce:ids>
 		</salesforce:delete>
 	</munit:after-test>
 	<flow name="getTestRecordFromSAP" doc:id="d383b0c4-d600-426a-acbd-7cc40ed64d72">
@@ -141,9 +141,9 @@ output application/xml
 }]]></ee:set-payload>
 						</ee:message>
 					</ee:transform>
-		<sap:sync-rfc doc:name="Get Customer by Name" doc:id="2b9bf3de-9ba8-4782-a809-a456c6705c8a" config-ref="SAP_Config" key="BAPI_CUSTOMER_FIND">
+        <sap:sync-rfc doc:name="Get Customer by Name" doc:id="2b9bf3de-9ba8-4782-a809-a456c6705c8a" config-ref="SAP_Config" key="BAPI_CUSTOMER_FIND">
 		</sap:sync-rfc>
-		<ee:transform doc:name="Transform result from SAP" doc:id="4c42c869-d831-4840-a507-f2b81baa3c0d">
+        <ee:transform doc:name="Transform result from SAP" doc:id="4c42c869-d831-4840-a507-f2b81baa3c0d">
 				<ee:message>
 					<ee:set-payload><![CDATA[%dw 2.0
 output application/java
@@ -155,7 +155,7 @@ payload."BAPI_CUSTOMER_FIND".tables."RESULT_TAB".*row map
 }]]></ee:set-payload>
 				</ee:message>
 			</ee:transform>
-		<munit-tools:assert-that doc:name="Assert that we found updated Customer" doc:id="05f39bd9-284d-4b1b-b3c3-9883484257f5" is="#[MunitTools::notNullValue()]" expression="#[payload[0].CustomerNumber]" message="Assert that we found updated Customer has failed"/>
+        <munit-tools:assert-that doc:name="Assert that we found updated Customer" doc:id="05f39bd9-284d-4b1b-b3c3-9883484257f5" is="#[MunitTools::notNullValue()]" expression="#[payload[0].CustomerNumber]" message="Assert that we found updated Customer has failed"/>
 	</flow>
 	<flow name="checkNotMigratedRecord" doc:id="1e2e27bd-2712-4069-b0ab-63c253d17148">
 		<ee:transform doc:name="Set SAP input" doc:id="6ccc6b8e-0d6d-4ae6-9c2b-c293513d72d9">

@@ -26,7 +26,7 @@ http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mu
 	<flow name="queryFlow">
 		<os:retrieve key="watermark" objectStore="watermarkStore" target="lastQueryTimestamp"
 			doc:name="Retrieve lastQueryTimestamp">
-			<os:default-value ><![CDATA[#[read(p('watermark.default.expression'))]]]></os:default-value>
+			<os:default-value ><![CDATA[#[p('watermark.default.expression')]]]></os:default-value>
 		</os:retrieve>
 		<salesforce:query doc:name="Query Accounts with filtering criteria from Salesforce"
 			doc:id="9beb521a-79a2-43e3-91c4-0d2c55454667" config-ref="Salesforce">
