@@ -45,7 +45,7 @@ output application/java
 		<salesforce:create type="Account" doc:name="Create Accounts in Salesforce" doc:id="fbea33fb-3a9f-482d-b346-1f55aa473eb9" config-ref="Salesforce">
 			<salesforce:records ><![CDATA[#[vars.accounts]]]></salesforce:records>
 		</salesforce:create>
-		<set-variable value="#[payload map ($.id)]" doc:name="Store IDs to variable sfdcIds" doc:id="413fbb75-d093-4418-963b-92b23d8b5b9f" variableName="sfdcIds"/>
+		<set-variable value="#[payload.items.id]" doc:name="Store IDs to variable sfdcIds" doc:id="413fbb75-d093-4418-963b-92b23d8b5b9f" variableName="sfdcIds"/>
 	</munit:before-test>
 	<munit:test name="test-suite-flowTest" description="Test" doc:id="c1d43016-feca-4b17-a7d7-c08d5f6565ba">
 		<munit:execution>
@@ -61,7 +61,7 @@ payload distinctBy (queryData)]]></ee:set-payload>
 			</ee:transform>
 			<flow-ref doc:name="businessLogicFlow" doc:id="b01f179d-753f-4604-8840-020d7ffbc32e" name="businessLogicFlow" />
 			<scripting:execute doc:name="Sleep for 10s until the processing is completed" doc:id="01a863ce-27b6-4ce6-8f5f-3e0b1da095b4" engine="groovy">
-				<scripting:code>sleep(10000)</scripting:code>
+				<scripting:code>sleep(30000)</scripting:code>
 			</scripting:execute>
 			<flow-ref doc:name="checkMigratedRecord" doc:id="a884d5e4-0eb1-4172-a9be-968980b4af6f" name="checkMigratedRecord"/>
 			<flow-ref doc:name="checkNotMigratedRecord" doc:id="6b7d9037-8109-421c-aace-9926f74c7dee" name="checkNotMigratedRecord"/>
@@ -73,7 +73,7 @@ payload distinctBy (queryData)]]></ee:set-payload>
 	</munit:test>
 	<munit:after-test name="test-suiteAfter_Test" description="After tests actions" doc:id="86475d6f-cf23-460b-9504-4d09cc840d68">
 		<salesforce:delete doc:name="Delete source Accounts from Salesforce" doc:id="e8e74886-fb83-4ed0-927d-14c6cdf7da97" config-ref="Salesforce">
-			<salesforce:delete-ids><![CDATA[#[vars.sfdcIds]]]></salesforce:delete-ids>
+			<salesforce:ids><![CDATA[#[vars.sfdcIds]]]></salesforce:ids>
 		</salesforce:delete>
 	</munit:after-test>
 	<flow name="getTestRecordFromSAP" doc:id="d383b0c4-d600-426a-acbd-7cc40ed64d72">
@@ -132,7 +132,7 @@ output application/xml
       "SELOPT_TAB": {
         "row": {
           "TABNAME": "KNA1",
-          "FIELDNAME": "PSTLZ"  ,
+         "FIELDNAME": "PSTLZ"  ,
           "FIELDVALUE": vars.accounts[0].BillingPostalCode
         }
       }
@@ -141,9 +141,9 @@ output application/xml
 }]]></ee:set-payload>
 						</ee:message>
 					</ee:transform>
-		<sap:sync-rfc doc:name="Get Customer by Name" doc:id="2b9bf3de-9ba8-4782-a809-a456c6705c8a" config-ref="SAP_Config" key="BAPI_CUSTOMER_FIND">
+        <sap:sync-rfc doc:name="Get Customer by Name" doc:id="2b9bf3de-9ba8-4782-a809-a456c6705c8a" config-ref="SAP_Config" key="BAPI_CUSTOMER_FIND">
 		</sap:sync-rfc>
-		<ee:transform doc:name="Transform result from SAP" doc:id="4c42c869-d831-4840-a507-f2b81baa3c0d">
+        <ee:transform doc:name="Transform result from SAP" doc:id="4c42c869-d831-4840-a507-f2b81baa3c0d">
 				<ee:message>
 					<ee:set-payload><![CDATA[%dw 2.0
 output application/java
@@ -155,7 +155,7 @@ payload."BAPI_CUSTOMER_FIND".tables."RESULT_TAB".*row map
 }]]></ee:set-payload>
 				</ee:message>
 			</ee:transform>
-		<munit-tools:assert-that doc:name="Assert that we found updated Customer" doc:id="05f39bd9-284d-4b1b-b3c3-9883484257f5" is="#[MunitTools::notNullValue()]" expression="#[payload[0].CustomerNumber]" message="Assert that we found updated Customer has failed"/>
+        <munit-tools:assert-that doc:name="Assert that we found updated Customer" doc:id="05f39bd9-284d-4b1b-b3c3-9883484257f5" is="#[MunitTools::notNullValue()]" expression="#[payload[0].CustomerNumber]" message="Assert that we found updated Customer has failed"/>
 	</flow>
 	<flow name="checkNotMigratedRecord" doc:id="1e2e27bd-2712-4069-b0ab-63c253d17148">
 		<ee:transform doc:name="Set SAP input" doc:id="6ccc6b8e-0d6d-4ae6-9c2b-c293513d72d9">
